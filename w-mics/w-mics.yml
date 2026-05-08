@@ -1,24 +1,18 @@
 name: w-mics
 root: ~/dev/projects
 
-on_project_start: |
-  docker compose -f w-mics-backend/docker-compose.yml up -d
-  docker compose -f w-mics/docker-compose.yml up -d
-
 on_project_stop: |
   docker compose -f w-mics-backend/docker-compose.yml down
-  docker compose -f w-mics/docker-compose.yml down
+  docker compose -f w-mics/docker-compose.yml         down
 
 windows:
-  - w-mics:
-      layout: tiled
-      post: tmux select-layout tiled
+  - dev:
+      layout: even-horizontal
       panes:
-        # top-left
-        - claude --continue
-        # top-right
-        - docker compose -f w-mics/docker-compose.yml logs -f
-        # bottom-left
-        - # empty for bash
-        # bottom-right
-        - docker compose -f w-mics-backend/docker-compose.yml logs -f
+        - claude
+        - # bash
+  - servers:
+      layout: even-horizontal
+      panes:
+        - docker compose -f w-mics/docker-compose.yml         up
+        - docker compose -f w-mics-backend/docker-compose.yml up
